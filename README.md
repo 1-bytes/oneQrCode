@@ -1,7 +1,6 @@
 # 一个二维码（活码）
 
-简介
------------
+## 简介
 
 二维码是当今社会移动设备上超级流行的一种编码方式，它比传统Bar Code条形码能存储更多的信息，也能表示更多的数据类型。
 
@@ -14,3 +13,9 @@
 - ...（更多）
 
 这个项目可以帮你解决上面的问题，且不需要任何的额外费用。
+
+## 版权声明 (License)
+
+oneQrCode 项目仅在 [AGPL-3.0-only](https://opensource.org/licenses/AGPL-3.0) 开源许可下发布。
+
+oneQrCode is distributed under [AGPL-3.0-only](https://opensource.org/licenses/AGPL-3.0).

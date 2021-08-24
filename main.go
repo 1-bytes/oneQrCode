@@ -14,31 +14,28 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
+	"golang.org/x/sync/errgroup"
 	"log"
 	"oneQrCode/bootstrap"
 	configs "oneQrCode/config"
-	"oneQrCode/pkg/config"
 )
+
+var g errgroup.Group
 
 func init() {
 	configs.Initialize()
 }
 
-// main .
+// main ...
 func main() {
 	bootstrap.SetupDB()
+	s := bootstrap.SetupServe(bootstrap.SetupRoute())
 
-	r := gin.New()
-	bootstrap.SetupRoute(r)
-
-	err := r.Run(
-		fmt.Sprintf("%s:%s",
-			config.GetString("app.url"),
-			config.GetString("app.port")))
-
-	if err != nil {
-		log.Fatal("Run the Service failed")
+	// run server
+	g.Go(func() error {
+		return s.ListenAndServe()
+	})
+	if err := g.Wait(); err != nil {
+		log.Fatal(err)
 	}
 }

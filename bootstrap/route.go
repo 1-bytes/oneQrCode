@@ -2,11 +2,13 @@ package bootstrap
 
 import (
 	"github.com/gin-gonic/gin"
-	"oneQrCode/router"
+	"oneQrCode/routes"
 )
 
 // SetupRoute used for init Router and middleware.
-func SetupRoute(r *gin.Engine) {
-	router.RegisterMiddleware(r)
-	router.RegisterWebRoutes(r)
+func SetupRoute() *gin.Engine {
+	router := gin.New()
+	routes.RegisterMiddleware(router)
+	routes.RegisterWebRoutes(router)
+	return router
 }

@@ -1,4 +1,4 @@
-package router
+package routes
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,8 +7,10 @@ import (
 
 // RegisterMiddleware used for register middleware.
 func RegisterMiddleware(r *gin.Engine) {
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	r.Use(
+		gin.Logger(),   // log
+		gin.Recovery(), // exception handling
+	)
 }
 
 // RegisterWebRoutes used for register router.

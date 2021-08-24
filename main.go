@@ -10,11 +10,14 @@
 //
 // You should have received a copy of the GNU Affero General Public License along with this program. If not,
 // see <https://www.gnu.org/licenses/>
+
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"oneQrCode/bootstrap"
 	configs "oneQrCode/config"
 	"oneQrCode/pkg/config"
 )
@@ -25,14 +28,17 @@ func init() {
 
 // main .
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	err := r.Run(":" + config.GetString("app.port"))
+	bootstrap.SetupDB()
+
+	r := gin.New()
+	bootstrap.SetupRoute(r)
+
+	err := r.Run(
+		fmt.Sprintf("%s:%s",
+			config.GetString("app.url"),
+			config.GetString("app.port")))
+
 	if err != nil {
-		log.Fatal("Run Service failed")
+		log.Fatal("Run the Service failed")
 	}
 }

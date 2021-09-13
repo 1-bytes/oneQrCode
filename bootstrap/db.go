@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"gorm.io/gorm"
+	"oneQrCode/app/models/user"
 	"oneQrCode/pkg/config"
 	"oneQrCode/pkg/model"
 	"time"
@@ -24,5 +25,7 @@ func SetupDB() {
 
 // migration create and keep db structure.
 func migration(db *gorm.DB) {
-	_ = db.AutoMigrate()
+	_ = db.AutoMigrate(
+		&user.User{},
+	)
 }

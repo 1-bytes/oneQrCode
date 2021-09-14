@@ -24,16 +24,15 @@ var g errgroup.Group
 
 func init() {
 	configs.Initialize()
+	bootstrap.Setup()
 }
 
-// main ...
+// main 入口函数.
 func main() {
-	bootstrap.SetupDB()
-	s := bootstrap.SetupServe(bootstrap.SetupRoute())
-
+	server := bootstrap.SetupServe(bootstrap.SetupRoute())
 	// run server
 	g.Go(func() error {
-		return s.ListenAndServe()
+		return server.ListenAndServe()
 	})
 	if err := g.Wait(); err != nil {
 		log.Fatal(err)

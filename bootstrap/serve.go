@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"log"
 	"net/http"
 	"oneQrCode/pkg/config"
 	"time"
@@ -16,6 +17,8 @@ func SetupServe(r http.Handler) *http.Server {
 		ReadHeaderTimeout: time.Duration(config.GetInt("http.read_header_timeout")) * time.Second,
 		WriteTimeout:      time.Duration(config.GetInt("http.write_timeout")) * time.Second,
 		IdleTimeout:       time.Duration(config.GetInt("http.idle_timeout")) * time.Second,
+		MaxHeaderBytes:    1 << 20,
 	}
+	log.Printf("[info] start http server listening %s", addr)
 	return server
 }

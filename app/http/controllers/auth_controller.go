@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"oneQrCode/app/models/user"
 	"oneQrCode/app/requests"
 	"oneQrCode/pkg/captcha"
@@ -49,7 +50,7 @@ func (ac *AuthController) GetCaptcha(c *gin.Context) {
 	session.Set("captcha_id", id)
 	err = session.Save()
 	logger.CheckError(err)
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"result": b64s,
 	})
 }

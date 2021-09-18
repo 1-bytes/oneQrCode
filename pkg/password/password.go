@@ -4,21 +4,21 @@ import (
 	"crypto/rand"
 	"golang.org/x/crypto/bcrypt"
 	"math/big"
-	"oneQrCode/pkg/logger"
+	"oneQrCode/pkg/e"
 )
 
 // Hash 使用 bcrypt 对密码进行加密
 func Hash(password string) string {
 	// GenerateFromPassword 的第二个参数是 cost 值。建议大于 12，数值越大，耗时约长，安全性越高。
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 20)
-	logger.CheckError(err)
+	e.CheckError(err)
 	return string(bytes)
 }
 
 // CheckHash 对比明文密码和数据库的哈希值
 func CheckHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	logger.CheckError(err)
+	e.CheckError(err)
 	return err == nil
 }
 

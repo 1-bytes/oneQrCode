@@ -5,7 +5,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"oneQrCode/app/models/user"
-	"oneQrCode/pkg/logger"
+	"oneQrCode/pkg/e"
 	"oneQrCode/pkg/validation"
 )
 
@@ -29,10 +29,10 @@ func ValidateRegistrationForm(data user.User) validation.Result {
 
 	// 单例初始化验证器
 	trans, validate, err := validation.GetInstance().SetupValidator()
-	logger.CheckError(err)
+	e.CheckError(err)
 
 	// 自定义翻译
-	validate.RegisterTranslation("eqfield=Password", trans, func(ut ut.Translator) error {
+	validate.RegisterTranslation("eqfield=Password", trans, func(ut ut.Translator) error { //nolint:errcheck
 		return ut.Add("eqfield", "{0}失败，请检查两次输入的密码是否正确", true)
 	}, func(ut ut.Translator, fe validator.FieldError) string {
 		t, _ := ut.T("eqfield", fe.Field())

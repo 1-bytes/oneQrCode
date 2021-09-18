@@ -1,6 +1,7 @@
 package utils
 
 import (
+	_ "gorm.io/gorm/utils"
 	"math/rand"
 	"os/exec"
 	"time"

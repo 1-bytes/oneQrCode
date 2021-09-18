@@ -10,7 +10,7 @@ import (
 	"oneQrCode/app/requests"
 	"oneQrCode/pkg/captcha"
 	"oneQrCode/pkg/config"
-	"oneQrCode/pkg/logger"
+	"oneQrCode/pkg/e"
 )
 
 type AuthController struct {
@@ -28,12 +28,12 @@ func (ac *AuthController) DoRegister(c *gin.Context) {
 	}
 	errs := requests.ValidateRegistrationForm(_user)
 	if len(errs) > 0 {
-		errCode := ac.getRandomString(16)
+		//errCode := ac.GetRandomString(16)
 
 		c.JSON(500, gin.H{
 			"message": "表单验证不通过，请验证修改后重新提交。",
 			"error":   errs,
-			"errCode": errCode,
+			"errCode": 0,
 		})
 	}
 }
@@ -44,12 +44,12 @@ func (ac *AuthController) GetCaptcha(c *gin.Context) {
 	decoder := json.NewDecoder(bytes.NewBufferString(config.GetString("captcha.style_json")))
 	var verificationCode captcha.Captcha
 	err := decoder.Decode(&verificationCode)
-	logger.CheckError(err)
+	e.CheckError(err)
 	id, b64s, err := verificationCode.NewCaptcha()
-	logger.CheckError(err)
+	e.CheckError(err)
 	session.Set("captcha_id", id)
 	err = session.Save()
-	logger.CheckError(err)
+	e.CheckError(err)
 	c.JSON(http.StatusOK, gin.H{
 		"result": b64s,
 	})

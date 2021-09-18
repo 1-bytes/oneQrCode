@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	dbLogger "gorm.io/gorm/logger"
 	"oneQrCode/pkg/config"
-	"oneQrCode/pkg/logger"
+	"oneQrCode/pkg/e"
 )
 
 var DB *gorm.DB
@@ -42,6 +42,6 @@ func ConnectDB() *gorm.DB {
 	DB, err = gorm.Open(gormConfig, &gorm.Config{
 		Logger: dbLogger.Default.LogMode(logLevel),
 	})
-	logger.CheckError(err)
+	e.CheckError(err)
 	return DB
 }

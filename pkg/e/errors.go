@@ -5,12 +5,12 @@ import (
 )
 
 var MsgFlags = map[int]string{
-	SUCCESS:                      "ok",
-	ERROR:                        "fail",
-	INVALID_PARAMS:               "请求参数错误",
-	ERROR_SAVE_SESSION_FAIL:      "存储SESSION失败",
-	ERROR_GET_CAPTCHACONFIG_FAIL: "获取验证码配置失败",
-	ERROR_INIT_CAPTCHA_FAIL:      "初始化验证码模块失败",
+	SUCCESS:                   "ok",
+	ERROR:                     "fail",
+	InvalidParams:             "请求参数错误",
+	ErrorSaveSessionFail:      "存储SESSION失败",
+	ErrorGetCaptchaConfigFail: "获取验证码配置失败",
+	ErrorInitCaptchaFail:      "初始化验证码模块失败",
 }
 
 // GetMsg get error information based on Code.

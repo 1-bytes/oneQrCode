@@ -3,8 +3,9 @@ package bootstrap
 // Setup 初始化指定的服务.
 func Setup() {
 	autoLoader(
-		SetupDB,   // 数据库
-		SetupLogs, // 日志
+		SetupDB,         // 数据库
+		SetupLogs,       // 日志
+		SetupValidation, // 表单验证
 	)
 }
 

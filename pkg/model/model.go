@@ -42,6 +42,6 @@ func ConnectDB() *gorm.DB {
 	DB, err = gorm.Open(gormConfig, &gorm.Config{
 		Logger: dbLogger.Default.LogMode(logLevel),
 	})
-	e.CheckError(err)
+	e.HasError(err)
 	return DB
 }

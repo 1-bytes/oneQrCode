@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"oneQrCode/app/models/user"
 	"oneQrCode/app/requests"
+	"oneQrCode/pkg/app"
 	"oneQrCode/pkg/captcha"
 	"oneQrCode/pkg/config"
 	"oneQrCode/pkg/e"
@@ -40,17 +41,25 @@ func (ac *AuthController) DoRegister(c *gin.Context) {
 
 // GetCaptcha 获取验证码.
 func (ac *AuthController) GetCaptcha(c *gin.Context) {
+	appG := app.Gin{C: c}
 	session := sessions.Default(c)
 	decoder := json.NewDecoder(bytes.NewBufferString(config.GetString("captcha.style_json")))
 	var verificationCode captcha.Captcha
 	err := decoder.Decode(&verificationCode)
-	e.CheckError(err)
+	if e.HasError(err) {
+		appG.Response(http.StatusOK, e.ERROR_GET_CAPTCHACONFIG_FAIL, nil)
+		return
+	}
 	id, b64s, err := verificationCode.NewCaptcha()
-	e.CheckError(err)
+	if e.HasError(err) {
+		appG.Response(http.StatusOK, e.ERROR_INIT_CAPTCHA_FAIL, nil)
+		return
+	}
 	session.Set("captcha_id", id)
 	err = session.Save()
-	e.CheckError(err)
-	c.JSON(http.StatusOK, gin.H{
-		"result": b64s,
-	})
+	if e.HasError(err) {
+		appG.Response(http.StatusOK, e.ERROR_INIT_CAPTCHA_FAIL, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, b64s)
 }

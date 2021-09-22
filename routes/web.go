@@ -5,6 +5,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"oneQrCode/app/http/controllers"
+	"oneQrCode/app/http/middlewares"
 	"oneQrCode/pkg/config"
 )
 
@@ -12,9 +13,9 @@ import (
 func RegisterMiddleware(r *gin.Engine) {
 	store := cookie.NewStore([]byte(config.GetString("app.key")))
 	r.Use(
-		gin.Logger(),   // log
-		gin.Recovery(), // exception handling
-		sessions.Sessions("SESSIONS", store),
+		gin.Recovery(),                       // exception handling
+		sessions.Sessions("SESSIONS", store), // SESSION
+		middlewares.Logger(),                 // log
 	)
 }
 

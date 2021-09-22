@@ -29,7 +29,7 @@ func ValidateRegistrationForm(data user.User) validation.Result {
 
 	// 单例初始化验证器
 	trans, validate, err := validation.GetInstance().SetupValidator()
-	e.CheckError(err)
+	e.HasError(err)
 
 	// 自定义翻译
 	validate.RegisterTranslation("eqfield=Password", trans, func(ut ut.Translator) error { //nolint:errcheck

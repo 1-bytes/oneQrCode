@@ -21,8 +21,20 @@ type AuthController struct {
 // DoRegister 用户注册.
 func (ac *AuthController) DoRegister(c *gin.Context) {
 	appG := app.Gin{C: c}
-	if err := c.ShouldBind(&user.User{}); err != nil {
-		appG.Response(http.StatusBadRequest, e.InvalidParams, validation.Translate(err))
+	// 表单验证
+	var u user.User
+	if err := c.ShouldBind(&u); err != nil {
+		appG.Response(http.StatusOK, e.InvalidParams, validation.Translate(err))
+		return
+	}
+	// 检查用户昵称和邮箱是否重复
+	if user.HasUserByUsername(u.Username) || user.HasUserByEmail(u.Email) {
+		appG.Response(http.StatusOK, e.ErrorExistUsernameOrEmail, nil)
+		return
+	}
+	// 注册账号
+	if err := u.Create(); err != nil {
+		appG.Response(http.StatusOK, e.ErrorRegisterUserFail, nil)
 		return
 	}
 	appG.Response(http.StatusOK, e.SUCCESS, nil)

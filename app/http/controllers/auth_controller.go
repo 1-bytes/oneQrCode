@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	ut "github.com/go-playground/universal-translator"
-	"github.com/go-playground/validator/v10"
 	"net/http"
 	"oneQrCode/app/models/user"
 	"oneQrCode/pkg/app"
@@ -23,12 +21,6 @@ type AuthController struct {
 // DoRegister 用户注册.
 func (ac *AuthController) DoRegister(c *gin.Context) {
 	appG := app.Gin{C: c}
-	_ = validation.Validate.RegisterTranslation("eqfield=Password", validation.Trans, func(ut ut.Translator) error {
-		return ut.Add("eqfield", "{0}失败，请检查两次输入的密码是否正确", true)
-	}, func(ut ut.Translator, fe validator.FieldError) string {
-		t, _ := ut.T("eqfield", fe.Field())
-		return t
-	})
 	if err := c.ShouldBind(&user.User{}); err != nil {
 		appG.Response(http.StatusBadRequest, e.InvalidParams, validation.Translate(err))
 		return

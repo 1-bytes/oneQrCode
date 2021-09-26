@@ -14,13 +14,9 @@
 package main
 
 import (
-	"golang.org/x/sync/errgroup"
-	"log"
 	"oneQrCode/bootstrap"
 	configs "oneQrCode/config"
 )
-
-var g errgroup.Group
 
 func init() {
 	configs.Initialize()
@@ -30,11 +26,5 @@ func init() {
 // main 入口函数.
 func main() {
 	server := bootstrap.SetupServe(bootstrap.SetupRoute())
-	// run server
-	g.Go(func() error {
-		return server.ListenAndServe()
-	})
-	if err := g.Wait(); err != nil {
-		log.Fatal(err)
-	}
+	bootstrap.SetupHttpService(server)
 }

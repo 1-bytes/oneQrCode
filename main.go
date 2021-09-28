@@ -25,6 +25,5 @@ func init() {
 
 // main 入口函数.
 func main() {
-	server := bootstrap.SetupServe(bootstrap.SetupRoute())
-	bootstrap.SetupHttpService(server)
+	bootstrap.SetupHttpService(bootstrap.NewServe())
 }

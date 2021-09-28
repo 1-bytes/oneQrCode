@@ -22,3 +22,8 @@ func SetupServe(r http.Handler) *http.Server {
 	log.Printf("[info] start http server listening %s", addr)
 	return server
 }
+
+// NewServe 获取一个新的服务.
+func NewServe() *http.Server {
+	return SetupServe(SetupRoute())
+}

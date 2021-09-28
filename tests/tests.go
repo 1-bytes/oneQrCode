@@ -3,6 +3,7 @@ package tests
 import (
 	"bytes"
 	"fmt"
+	"github.com/kinbiko/jsonassert"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -31,11 +32,12 @@ func Endpoint(t *testing.T, router *http.Server, tc APITestCase) {
 			req.Header.Set("Content-Type", "application/json")
 		}
 		w := httptest.NewRecorder()
-		//router.ServeHTTP(w, req)
 		router.Handler.ServeHTTP(w, req)
 		assert.Equal(t, tc.WantStatus, w.Code, "status mismatch")
-		//assert.Equal(t, tc.WantStatus, w.Body.String())
-		assert.JSONEq(t, tc.WantResponse, w.Body.String())
+		if tc.WantResponse != "" {
+			ja := jsonassert.New(t)
+			ja.Assertf(w.Body.String(), tc.WantResponse)
+		}
 	})
 }
 

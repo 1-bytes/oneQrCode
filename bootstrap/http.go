@@ -8,8 +8,8 @@ import (
 
 var g errgroup.Group
 
-// SetupHttpService 初始化并启动 HTTP 服务.
-func SetupHttpService(server *http.Server) {
+// Run 启动 HTTP 服务.
+func Run(server *http.Server) {
 	// run server
 	g.Go(func() error {
 		return server.ListenAndServe()

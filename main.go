@@ -15,15 +15,13 @@ package main
 
 import (
 	"oneQrCode/bootstrap"
-	configs "oneQrCode/config"
 )
 
 func init() {
-	configs.Initialize()
 	bootstrap.Setup()
 }
 
 // main 入口函数.
 func main() {
-	bootstrap.SetupHttpService(bootstrap.NewServe())
+	bootstrap.Run(bootstrap.NewServe())
 }

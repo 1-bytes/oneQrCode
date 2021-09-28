@@ -44,7 +44,8 @@ func (ac *AuthController) DoRegister(c *gin.Context) {
 func (ac *AuthController) GetCaptcha(c *gin.Context) {
 	appG := app.Gin{C: c}
 	session := sessions.Default(c)
-	decoder := json.NewDecoder(bytes.NewBufferString(config.GetString("captcha.style_json")))
+	cfg := config.GetString("captcha.style_json")
+	decoder := json.NewDecoder(bytes.NewBufferString(cfg))
 	var verificationCode captcha.Captcha
 	err := decoder.Decode(&verificationCode)
 	if e.HasError(err) {

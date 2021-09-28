@@ -1,7 +1,10 @@
 package bootstrap
 
+import configs "oneQrCode/config"
+
 // Setup 初始化指定的服务.
 func Setup() {
+	configs.Initialize()
 	autoLoader(
 		SetupDB,         // 数据库
 		SetupLogs,       // 日志

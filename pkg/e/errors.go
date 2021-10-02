@@ -9,7 +9,7 @@ var MsgFlags = map[int]string{
 	ERROR:                      "fail",
 	InvalidParams:              "请求参数错误",
 	ErrorSaveSessionFail:       "存储 SESSION 失败",
-	ErrorVerifyCaptchaFail:     "验证码错误",
+	ErrorVerifyCaptchaFail:     "校验验证码不通过",
 	ErrorInitCaptchaFail:       "初始化验证码模块失败",
 	ErrorRegisterUserFail:      "注册账号失败",
 	ErrorExistUsernameOrEmail:  "账号或邮箱已经注册过了，请更换后重试",

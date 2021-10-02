@@ -1,22 +1,17 @@
 package controllers
 
 import (
-	"bytes"
-	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"oneQrCode/app/models/user"
 	"oneQrCode/pkg/app"
 	"oneQrCode/pkg/captcha"
-	"oneQrCode/pkg/config"
 	"oneQrCode/pkg/e"
 	"oneQrCode/pkg/validation"
 )
 
-type AuthController struct {
-	BaseController
-}
+type AuthController struct{}
 
 // DoRegister 用户注册.
 func (ac *AuthController) DoRegister(c *gin.Context) {
@@ -44,15 +39,7 @@ func (ac *AuthController) DoRegister(c *gin.Context) {
 func (ac *AuthController) GetCaptcha(c *gin.Context) {
 	appG := app.Gin{C: c}
 	session := sessions.Default(c)
-	cfg := config.GetString("captcha.style_json")
-	decoder := json.NewDecoder(bytes.NewBufferString(cfg))
-	var verificationCode captcha.Captcha
-	err := decoder.Decode(&verificationCode)
-	if e.HasError(err) {
-		appG.Response(http.StatusOK, e.ErrorGetCaptchaConfigFail, nil)
-		return
-	}
-	id, b64s, err := verificationCode.NewCaptcha()
+	id, b64s, err := captcha.GetInstance("").NewCaptcha()
 	if e.HasError(err) {
 		appG.Response(http.StatusOK, e.ErrorInitCaptchaFail, nil)
 		return

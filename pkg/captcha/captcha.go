@@ -1,7 +1,11 @@
 package captcha
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/mojocn/base64Captcha"
+	"oneQrCode/pkg/e"
+	"sync"
 )
 
 // Captcha 验证码
@@ -17,6 +21,41 @@ type Captcha struct {
 }
 
 var store = base64Captcha.DefaultMemStore
+
+var instance *Captcha
+var once sync.Once
+
+// GetInstance 获取一个实例.
+func GetInstance(cfg string) *Captcha {
+	once.Do(func() {
+		instance = &Captcha{}
+		instance.SetConfig(cfg)
+	})
+	return instance
+}
+
+// SetConfig 载入验证码配置.
+func (c *Captcha) SetConfig(cfg string) {
+	// 载入配置函数
+	var loadCfg = func(cfg string, captcha *Captcha) error {
+		decoder := json.NewDecoder(bytes.NewBufferString(cfg))
+		err := decoder.Decode(c)
+		return err
+	}
+
+	if cfg == "" || e.HasError(loadCfg(cfg, c)) {
+		// 如果没有配置 或报错，则使用默认的配置
+		defaultCfg := `{
+    "CaptchaType": "string",
+    "DriverAudio": {"Length": 6, "Language": "zh"},
+    "DriverString": {"Height": 60, "Width": 230, "ShowLineOptions": 14, "NoiseCount": 480, "Source": "234568wertyupkjhfdsazxcvnm", "Length": 6, "Fonts": ["Flim-Flam.ttf", "DeborahFancyDress.ttf", "actionj.ttf", "RitaSmith.ttf", "chromohv.ttf", "ApothecaryFont.ttf"], "BgColor": {"R": 0, "G": 0, "B": 0, "A": 0}},
+    "DriverMath": {"Height": 60, "Width": 240, "ShowLineOptions": 14, "NoiseCount": 0, "Length": 6, "Fonts": ["wqy-microhei.ttc"], "BgColor": {"R": 0, "G": 0, "B": 0, "A": 0}},
+    "DriverChinese": {"Height": 60, "Width": 320, "ShowLineOptions": 0, "NoiseCount": 0, "Source": "设想,你在,处理,消费者,的音,频输,出音,频可,能无,论什,么都,没有,任何,输出,或者,它可,能是,单声道,立体声,或是,环绕立,体声的,,不想要,的值", "Length": 2, "Fonts": ["wqy-microhei.ttc"], "BgColor": {"R": 125, "G": 125, "B": 0, "A": 118}},
+    "DriverDigit": {"Height": 80, "Width": 240, "Length": 5, "MaxSkew": 0.7, "DotCount": 80}
+}`
+		_ = loadCfg(defaultCfg, c)
+	}
+}
 
 // NewCaptcha 创建一个验证码.
 func (c *Captcha) NewCaptcha() (string, string, error) {

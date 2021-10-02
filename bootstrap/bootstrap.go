@@ -9,6 +9,7 @@ func Setup() {
 		SetupDB,         // 数据库
 		SetupLogs,       // 日志
 		SetupValidation, // 表单验证
+		SetupCaptcha,    // 验证码
 	)
 }
 

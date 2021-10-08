@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"oneQrCode/pkg/config"
@@ -9,6 +10,7 @@ import (
 
 // SetupServe is used to initialize the http server
 func SetupServe(r http.Handler) *http.Server {
+	gin.SetMode(getMode())
 	addr := config.GetString("http.listen_ip") + ":" + config.GetString("http.listen_port")
 	server := &http.Server{
 		Addr:              addr,
@@ -21,6 +23,14 @@ func SetupServe(r http.Handler) *http.Server {
 	}
 	log.Printf("[info] start http server listening %s", addr)
 	return server
+}
+
+// getMode 根据配置返回一个对应的 Mode.
+func getMode() string {
+	if config.GetBool("app.debug") {
+		return gin.DebugMode
+	}
+	return gin.ReleaseMode
 }
 
 // NewServe 获取一个新的服务.

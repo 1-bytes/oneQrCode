@@ -1,4 +1,4 @@
-package bootstrap
+package main
 
 import (
 	"golang.org/x/sync/errgroup"

@@ -23,5 +23,5 @@ func init() {
 
 // main 入口函数.
 func main() {
-	bootstrap.Run(bootstrap.NewServe())
+	Run(bootstrap.NewServe())
 }

@@ -7,15 +7,19 @@ import (
 	"oneQrCode/app/http/controllers"
 	"oneQrCode/app/http/middlewares"
 	"oneQrCode/pkg/config"
+	"oneQrCode/pkg/logger"
+	"time"
 )
 
 // RegisterMiddleware used for register middleware.
 func RegisterMiddleware(r *gin.Engine) {
 	store := cookie.NewStore([]byte(config.GetString("app.key")))
+
 	r.Use(
-		gin.Recovery(),                       // exception handling
-		sessions.Sessions("SESSIONS", store), // SESSION
-		middlewares.Logger(),                 // log
+		middlewares.RequestId(),                               // 为每个请求标记一个唯一性质的 ID
+		middlewares.GinRecoveryWithZap(logger.Logger, true),   // err 和 panic 记录到日志（包括堆栈信息）
+		middlewares.GinZap(logger.Logger, time.RFC3339, true), // 访问请求记录到日志
+		sessions.Sessions("SESSIONS", store),                  // SESSION
 	)
 }
 
@@ -24,8 +28,8 @@ func RegisterWebRoutes(r *gin.Engine) {
 	v := r.Group("api/v1")
 	accountGroup := v.Group("account")
 	{
-		auth := controllers.AuthController{}
-		accountGroup.POST("doRegister", auth.DoRegister)
-		accountGroup.GET("getCaptcha", auth.GetCaptcha)
+		controller := controllers.AccountController{}
+		accountGroup.POST("doRegister", controller.DoRegister)
+		accountGroup.GET("getCaptcha", controller.GetCaptcha)
 	}
 }

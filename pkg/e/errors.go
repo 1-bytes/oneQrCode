@@ -1,8 +1,6 @@
 package e
 
-import (
-	"oneQrCode/pkg/logger"
-)
+import "oneQrCode/pkg/logger"
 
 var MsgFlags = map[int]string{
 	SUCCESS:                    "success",
@@ -31,7 +29,8 @@ func GetMsg(code int) string {
 // HasError any errors will be saved to the log.
 func HasError(err error) bool {
 	if err != nil {
-		logger.Error(err)
+		sugar := logger.Logger.Sugar()
+		sugar.Errorf("HasError catches unpredictable errors: %s", err)
 		return true
 	}
 	return false

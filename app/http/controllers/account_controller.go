@@ -11,10 +11,10 @@ import (
 	"oneQrCode/pkg/validation"
 )
 
-type AuthController struct{}
+type AccountController struct{}
 
 // DoRegister 用户注册.
-func (ac *AuthController) DoRegister(c *gin.Context) {
+func (ac *AccountController) DoRegister(c *gin.Context) {
 	appG := app.Gin{C: c}
 	session := sessions.Default(c)
 	// 表单验证
@@ -45,7 +45,7 @@ func (ac *AuthController) DoRegister(c *gin.Context) {
 }
 
 // GetCaptcha 获取验证码.
-func (ac *AuthController) GetCaptcha(c *gin.Context) {
+func (ac *AccountController) GetCaptcha(c *gin.Context) {
 	appG := app.Gin{C: c}
 	session := sessions.Default(c)
 	id, b64s, err := captcha.GetInstance().Generate()

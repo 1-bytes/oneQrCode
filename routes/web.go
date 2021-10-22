@@ -26,10 +26,10 @@ func RegisterMiddleware(r *gin.Engine) {
 // RegisterWebRoutes used for register router.
 func RegisterWebRoutes(r *gin.Engine) {
 	v := r.Group("api/v1")
-	accountGroup := v.Group("account")
+	userGroup := v.Group("user")
 	{
-		controller := controllers.AccountController{}
-		accountGroup.POST("doRegister", controller.DoRegister)
-		accountGroup.GET("getCaptcha", controller.GetCaptcha)
+		controller := controllers.UserController{}
+		userGroup.GET("getCaptcha", controller.GetCaptcha)
+		userGroup.POST("doRegister", controller.DoRegister)
 	}
 }

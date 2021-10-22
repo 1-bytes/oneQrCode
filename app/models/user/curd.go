@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"oneQrCode/pkg/model"
 	"strconv"
 )
@@ -45,6 +46,7 @@ func HasUserByUsername(username string) bool {
 
 // Create 创建用户，通过 User.ID 来判断是否创建成功.
 func (user *User) Create() (err error) {
+	fmt.Println("------------------------", user.Username)
 	if err = model.DB.Create(&user).Error; err != nil {
 		return err
 	}

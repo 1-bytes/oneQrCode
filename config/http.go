@@ -5,7 +5,7 @@ import "oneQrCode/pkg/config"
 func init() {
 	config.Add("http", config.StrMap{
 		// 用来生成链接
-		"listen_ip": config.Env("HTTP_LISTEN_IP", "127.0.0.1"),
+		"listen_host": config.Env("HTTP_LISTEN_HOST", "127.0.0.1"),
 		// 应用服务端口
 		"listen_port": config.Env("HTTP_LISTEN_PORT", "8080"),
 		// 读取包括请求体的整个请求的最大时长

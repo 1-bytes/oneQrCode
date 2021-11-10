@@ -11,7 +11,7 @@ import (
 // SetupServe is used to initialize the http server
 func SetupServe(r http.Handler) *http.Server {
 	gin.SetMode(getMode())
-	addr := config.GetString("http.listen_ip") + ":" + config.GetString("http.listen_port")
+	addr := config.GetString("http.listen_host") + ":" + config.GetString("http.listen_port")
 	server := &http.Server{
 		Addr:              addr,
 		Handler:           r,

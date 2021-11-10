@@ -3,7 +3,7 @@ module oneQrCode
 go 1.17
 
 require (
-	github.com/gin-contrib/sessions v0.0.3
+	github.com/gin-contrib/sessions v0.0.4
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
@@ -16,8 +16,8 @@ require (
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	gorm.io/driver/mysql v1.1.2
-	gorm.io/gorm v1.21.16
+	gorm.io/driver/mysql v1.1.3
+	gorm.io/gorm v1.22.2
 )
 
 require (
@@ -49,7 +49,7 @@ require (
 	github.com/ugorji/go/codec v1.2.6 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
-	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
+	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect

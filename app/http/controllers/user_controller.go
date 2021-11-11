@@ -109,5 +109,8 @@ func (uc *UserController) DoLogin(c *gin.Context) {
 
 // Logout 退出登录.
 func (uc UserController) Logout(c *gin.Context) {
-	// TODO: 待开发
+	appG := uc.GetAppG(c)
+	session := uc.GetSessions(c)
+	session.Clear()
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
 }

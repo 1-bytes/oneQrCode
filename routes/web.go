@@ -14,6 +14,14 @@ import (
 // RegisterMiddleware used for register middleware.
 func RegisterMiddleware(r *gin.Engine) {
 	store := cookie.NewStore([]byte(config.GetString("app.key")))
+	store.Options(sessions.Options{
+		Path:     "/",
+		Domain:   config.GetString("http.listen_host"),
+		MaxAge:   86400 * 3,
+		Secure:   false,
+		HttpOnly: true,
+		SameSite: 0,
+	})
 
 	r.Use(
 		middlewares.RequestId(),                               // 为每个请求标记一个唯一性质的 ID
@@ -31,5 +39,6 @@ func RegisterWebRoutes(r *gin.Engine) {
 		controller := controllers.UserController{}
 		userGroup.GET("getCaptcha", controller.GetCaptcha)
 		userGroup.POST("doRegister", controller.DoRegister)
+		userGroup.POST("doLogin", controller.DoLogin)
 	}
 }

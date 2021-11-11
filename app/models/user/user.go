@@ -5,8 +5,8 @@ import "oneQrCode/app/models"
 // User 用户信息 Model.
 type User struct {
 	models.IdModel
-	Email    string `gorm:"type:varchar(100);not null" valid:"email"`
-	Username string `gorm:"type:varchar(255);not null;unique" valid:"username"`
+	Email    string `gorm:"type:varchar(100);not null;unique" valid:"email"`
+	Username string `gorm:"type:varchar(255);not null;" valid:"username"`
 	Password string `gorm:"type:varchar(255);not null" valid:"password"`
 	Disable  bool   `gorm:"type:bool;not null;default:false" valid:"disable"`
 

@@ -10,7 +10,9 @@ var MsgFlags = map[int]string{
 	ErrorVerifyCaptchaFail:     "校验验证码不通过",
 	ErrorInitCaptchaFail:       "初始化验证码模块失败",
 	ErrorRegisterUserFail:      "注册账号失败",
-	ErrorExistUsernameOrEmail:  "账号或邮箱已经注册过了，请更换后重试",
+	ErrorExistEmail:            "该邮箱已经注册过了，请更换后重试",
+	ErrorLoginFail:             "登录失败，账号或密码错误",
+	ErrorLoginDisabled:         "登录失败，该账户已被封禁",
 	ErrorAuthCheckTokenFail:    "TOKEN 鉴权失败",
 	ErrorAuthCheckTokenOverdue: "TOKEN 已过期",
 	ErrorAuthToken:             "TOKEN 生成失败",
@@ -30,7 +32,7 @@ func GetMsg(code int) string {
 func HasError(err error) bool {
 	if err != nil {
 		sugar := logger.Logger.Sugar()
-		sugar.Errorf("HasError catches unpredictable errors: %s", err)
+		sugar.Errorf("An unpredictable error was caught: %s", err)
 		return true
 	}
 	return false

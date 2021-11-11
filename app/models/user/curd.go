@@ -1,10 +1,27 @@
 package user
 
 import (
-	"fmt"
 	"oneQrCode/pkg/model"
+	"oneQrCode/pkg/password"
 	"strconv"
 )
+
+// Create 创建用户，通过 User.ID 来判断是否创建成功.
+func (user *User) Create() (err error) {
+	if err = model.DB.Create(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// Update 更新用户资料.
+func (user *User) Update() (rowsAffected int64, err error) {
+	result := model.DB.Save(&user)
+	if err = model.DB.Error; err != nil {
+		return 0, err
+	}
+	return result.RowsAffected, nil
+}
 
 // Get 根据 ID 获取用户信息.
 func Get(uidStr string) (User, error) {
@@ -28,36 +45,15 @@ func GetByEmail(email string) (User, error) {
 	return user, nil
 }
 
-// HasUserByEmail 通过 Email 判断用户是否存在，存在返回 true，不存在返回 false.
-func HasUserByEmail(email string) bool {
+// HasByEmail 通过 Email 判断用户是否存在，存在返回 true，不存在返回 false.
+func HasByEmail(email string) bool {
 	var user User
 	var count int64
 	model.DB.Where("email = ?", email).First(&user).Count(&count)
 	return count != 0
 }
 
-// HasUserByUsername 通过 Username 判断用户是否存在，存在返回 true，不存在返回 false.
-func HasUserByUsername(username string) bool {
-	var user User
-	var count int64
-	model.DB.Where("username = ?", username).First(&user).Count(&count)
-	return count != 0
-}
-
-// Create 创建用户，通过 User.ID 来判断是否创建成功.
-func (user *User) Create() (err error) {
-	fmt.Println("------------------------", user.Username)
-	if err = model.DB.Create(&user).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-// Update 更新用户资料.
-func (user *User) Update() (rowsAffected int64, err error) {
-	result := model.DB.Save(&user)
-	if err = model.DB.Error; err != nil {
-		return 0, err
-	}
-	return result.RowsAffected, nil
+// CheckPassword 校验密码是否正确，成功返回 true，失败返回false.
+func CheckPassword(pass, hash string) bool {
+	return password.IsHashed(hash) && password.CheckHash(pass, hash)
 }

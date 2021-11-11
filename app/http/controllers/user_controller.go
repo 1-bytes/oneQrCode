@@ -9,6 +9,7 @@ import (
 	"oneQrCode/pkg/captcha"
 	"oneQrCode/pkg/e"
 	"oneQrCode/pkg/validation"
+	"strconv"
 )
 
 type UserController struct {
@@ -44,21 +45,22 @@ func (uc *UserController) DoRegister(c *gin.Context) {
 		return
 	}
 	// 检查验证码合法性 无论成功与否，验证完成以后验证码失效
-	captchaId := session.Get("captcha_id").(string)
+	captchaId, _ := session.Get("captcha_id").(string)
+	session.Delete("captcha_id")
+	_ = session.Save()
 	if !captcha.GetInstance().Verify(captchaId, data.Captcha, true) {
 		appG.Response(http.StatusOK, e.ErrorVerifyCaptchaFail, nil)
 		return
 	}
-	// 检查用户昵称和邮箱是否重复
-	if user.HasUserByUsername(data.Username) || user.HasUserByEmail(data.Email) {
-		appG.Response(http.StatusOK, e.ErrorExistUsernameOrEmail, nil)
+	// 检查用户邮箱是否重复
+	if user.HasByEmail(data.Email) {
+		appG.Response(http.StatusOK, e.ErrorExistEmail, nil)
 		return
 	}
 	// 注册账号
 	var u user.User
 	m, _ := json.Marshal(data)
 	_ = json.Unmarshal(m, &u)
-
 	if err := u.Create(); err != nil {
 		appG.Response(http.StatusOK, e.ErrorRegisterUserFail, nil)
 		return
@@ -70,17 +72,42 @@ func (uc *UserController) DoRegister(c *gin.Context) {
 func (uc *UserController) DoLogin(c *gin.Context) {
 	appG := uc.GetAppG(c)
 	session := uc.GetSessions(c)
-	var u user.User
-	if err := c.ShouldBind(&u); err != nil {
+	// 表单验证
+	var data requests.ValidateUserLogin
+	if err := c.ShouldBind(&data); err != nil {
 		appG.Response(http.StatusOK, e.InvalidParams, validation.Translate(err))
 		return
 	}
-
 	// 检查验证码合法性 无论成功与否，验证完成以后验证码失效
-	captchaId := session.Get("captcha_id").(string)
-	if !captcha.GetInstance().Verify(captchaId, u.Captcha, true) {
+	captchaId, _ := session.Get("captcha_id").(string)
+	session.Delete("captcha_id")
+	_ = session.Save()
+	if !captcha.GetInstance().Verify(captchaId, data.Captcha, true) {
 		appG.Response(http.StatusOK, e.ErrorVerifyCaptchaFail, nil)
 		return
 	}
+	// 检查邮箱和对应的密码是否正确
+	userInfo, err := user.GetByEmail(data.Email)
+	if err != nil || !user.CheckPassword(data.Password, userInfo.Password) {
+		appG.Response(http.StatusOK, e.ErrorLoginFail, nil)
+		return
+	}
+	// 检查账户是否被封禁
+	if userInfo.Disable {
+		appG.Response(http.StatusOK, e.ErrorLoginDisabled, nil)
+		return
+	}
+	info := map[string]string{
+		"uid":      strconv.FormatUint(userInfo.ID, 10),
+		"email":    userInfo.Email,
+		"username": userInfo.Username,
+	}
+	session.Set("user_info", info)
+	_ = session.Save()
+	appG.Response(http.StatusOK, e.SUCCESS, info)
+}
 
+// Logout 退出登录.
+func (uc UserController) Logout(c *gin.Context) {
+	// TODO: 待开发
 }

@@ -4,12 +4,12 @@ import configs "oneQrCode/config"
 
 // Setup 初始化指定的服务.
 func Setup() {
-	configs.Initialize()
 	autoLoader(
-		SetupDB,         // 数据库
-		SetupLogger,     // 日志
-		SetupValidation, // 表单验证
-		SetupCaptcha,    // 验证码
+		configs.Initialize, // 配置文件
+		SetupDB,            // 数据库
+		SetupLogger,        // 日志
+		SetupValidation,    // 表单验证
+		SetupCaptcha,       // 验证码
 	)
 }
 

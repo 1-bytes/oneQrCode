@@ -75,7 +75,12 @@ func (c *Captcha) Generate() (string, string, error) {
 	return id, b64s, err
 }
 
-// Verify 验证码校验，无论验证结果是通过还是失败，验证码 id 均会失效，需要重新获取验证码后再次尝试.
+// Verify 验证码校验，clear 参数为 true 时，则验证后失效.
 func (c *Captcha) Verify(id string, verifyValue string, clear bool) bool {
 	return store.Verify(id, verifyValue, clear)
+}
+
+// Get 通过验证码 id 获取验证码，clear 参数为 true 时，则获取后失效.
+func (c *Captcha) Get(id string, clear bool) string {
+	return store.Get(id, clear)
 }

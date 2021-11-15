@@ -8,9 +8,9 @@ func init() {
 		"mysql": map[string]interface{}{
 			"host":     config.Env("DB_HOST", "127.0.0.1"),
 			"port":     config.Env("DB_PORT", "3306"),
-			"database": config.Env("DB_DATABASE", "one_qr_code"),
 			"username": config.Env("DB_USERNAME", ""),
 			"password": config.Env("DB_PASSWORD", ""),
+			"database": config.Env("DB_DATABASE", "one_qr_code"),
 			"charset":  "utf8mb4",
 			// db parameter settings
 			"max_idle_connections": config.Env("DB_MAX_IDLE_CONNECTIONS", 100),

@@ -4,9 +4,9 @@ import "oneQrCode/pkg/config"
 
 func init() {
 	config.Add("http", config.StrMap{
-		// 用来生成链接
+		// 地址
 		"listen_host": config.Env("HTTP_LISTEN_HOST", "127.0.0.1"),
-		// 应用服务端口
+		// 端口
 		"listen_port": config.Env("HTTP_LISTEN_PORT", "8080"),
 		// 读取包括请求体的整个请求的最大时长
 		"read_timeout": config.Env("HTTP_READ_TIMEOUT", 5),
